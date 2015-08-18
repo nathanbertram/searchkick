@@ -468,9 +468,12 @@ module Searchkick
         field = :_id if field.to_s == "id"
 
         if field == :or
-          value.each do |or_clause|
-            filters << {or: or_clause.map { |or_statement| {and: where_filters(or_statement)} }}
-          end
+          filters << {
+            or:
+              value.collect do |or_clause|
+                 or_clause.map { |or_statement| {and: where_filters(or_statement)} }}
+              end
+            }
         else
           # expand ranges
           if value.is_a?(Range)
