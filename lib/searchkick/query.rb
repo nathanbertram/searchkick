@@ -468,10 +468,10 @@ module Searchkick
         field = :_id if field.to_s == "id"
 
         if field == :or
-          or_filters = value.collect do |or_clause|
+          or_filters = value.flat_map do |or_clause|
             or_clause.map { |or_statement| {and: where_filters(or_statement)} }
           end
-          filters << { or: or_filters.flatten }
+          filters << { or: or_filters }
         else
           # expand ranges
           if value.is_a?(Range)
